@@ -11,6 +11,7 @@ TWO = 2
 
 def final_grade(input_path: str, output_path: str) -> int:
     output_lines = {}
+    saved_avg_grades = {}
     input_file = open(input_path, 'r')
     output_file = open(output_path, 'w')
     course_avg_sum = 0
@@ -18,7 +19,10 @@ def final_grade(input_path: str, output_path: str) -> int:
         student_id, final_grade, output_line = getOutputLine(line[:-1])
         if output_line:
             output_lines[student_id] = output_line
+            if student_id in saved_avg_grades:
+                course_avg_sum -= saved_avg_grades[student_id]
             course_avg_sum += int(final_grade)
+            saved_avg_grades[student_id] = final_grade
     for key in sorted(output_lines):
         output_file.write(output_lines[key])
     input_file.close()
@@ -29,13 +33,13 @@ def isValidId(student_id: str) -> bool:
     return (len(student_id) == NUM_DIGITS_IN_ID and student_id[0] != '0')
 
 def isValidName(student_name: str) -> bool:
-    return student_name.isalpha()
+    return student_name.isalpha() and student_name != ''
 
 def isValidSemester(semester_num: str) -> bool:
-    return int(semester_num) > 0
+    return semester_num != '' and int(semester_num) > 0
 
 def isValidHwAvg(hw_avg: str) -> bool:
-    return MIN_HW_AVG <= int(hw_avg) and int(hw_avg) <= MAX_HW_AVG
+    return hw_avg != '' and MIN_HW_AVG <= int(hw_avg) and int(hw_avg) <= MAX_HW_AVG
 
 def isValidLine(line: str) -> [str,str,bool]:
     line_content = line.replace(" ", "").split(',')
