@@ -13,32 +13,32 @@ def final_grade(input_path: str, output_path: str) -> int:
     output_lines = {}
     input_file = open(input_path, 'r')
     output_file = open(output_path, 'w')
-    course_hw_avg_sum = 0
+    course_avg_sum = 0
     for line in input_file:
-        student_id, hw_avg, output_line = getOutputLine(line)
+        student_id, final_grade, output_line = getOutputLine(line[:-1])
         if output_line:
             output_lines[student_id] = output_line
-        course_hw_avg_sum += hw_avg
-    for key in output_lines.keys().sort():
+            course_avg_sum += int(final_grade)
+    for key in sorted(output_lines):
         output_file.write(output_lines[key])
     input_file.close()
     output_file.close()
-    return course_hw_avg_sum//len(output_lines)
+    return course_avg_sum//len(output_lines) if len(output_lines) != 0 else 0
 
-def isValidId(student_id: int) -> bool:
-    return (len(str(student_id)) == NUM_DIGITS_IN_ID and str(student_id)[0] != 0)
+def isValidId(student_id: str) -> bool:
+    return (len(student_id) == NUM_DIGITS_IN_ID and student_id[0] != '0')
 
 def isValidName(student_name: str) -> bool:
-    return student_name.strip().isalpha()
+    return student_name.isalpha()
 
-def isValidSemester(semester_num: int) -> bool:
-    return semester_num > 0
+def isValidSemester(semester_num: str) -> bool:
+    return int(semester_num) > 0
 
-def isValidHwAvg(hw_avg: int) -> bool:
-    return MIN_HW_AVG <= hw_avg and hw_avg <= MAX_HW_AVG
+def isValidHwAvg(hw_avg: str) -> bool:
+    return MIN_HW_AVG <= int(hw_avg) and int(hw_avg) <= MAX_HW_AVG
 
-def isValidLine(line: str) -> int,int,bool:
-    line_content = line.strip().split(',')
+def isValidLine(line: str) -> [str,str,bool]:
+    line_content = line.replace(" ", "").split(',')
     if isValidId(line_content[0]) and isValidName(line_content[1]) \
         and isValidSemester(line_content[2]) and isValidHwAvg(line_content[3]):
         return line_content[0], line_content[3], True
@@ -47,13 +47,13 @@ def isValidLine(line: str) -> int,int,bool:
 def calcFinalGrade(student_id: int, hw_avg: int) -> int:
     return (student_id%HUNDRED + hw_avg)//2
     
-def getOutputLine(input_line: str) -> int,int,str:
+def getOutputLine(input_line: str) -> [str,str,str]:
     student_id, hw_avg, line_valid = isValidLine(input_line)
     if (not line_valid):
         return None, None, None
-    final_grade = calcFinalGrade(student_id, hw_avg)
-    output_line = ", ".join(student_id, hw_avg, final_grade)
-    return student_id, hw_avg, output_line
+    final_grade = calcFinalGrade(int(student_id), int(hw_avg))
+    output_line = ", ".join((student_id, hw_avg, str(final_grade)+"\n"))
+    return student_id, final_grade, output_line
 
 
 
