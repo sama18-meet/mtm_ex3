@@ -73,7 +73,7 @@ def check_strings(s1: str, s2: str) -> bool:
     s2 = s2.lower()
     for letter in s1:
         if letter not in s2:
-            return flase
+            return False
         else:
             s2_without_letter = s2.replace(letter, "")
             s2 = s2_without_letter + letter*(len(s2)-len(s2_without_letter)-1)
