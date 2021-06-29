@@ -69,5 +69,14 @@ def getOutputLine(input_line: str) -> [str,str,str]:
 #   s1: The string that we want to check if it can be constructed
 #   s2: The string that we want to construct s1 from
 def check_strings(s1: str, s2: str) -> bool:
-    # TODO: implement here
-    raise NotImplementedError
+    s1 = s1.lower()
+    s2 = s2.lower()
+    for letter in s1:
+        if letter not in s2:
+            return flase
+        else:
+            s2_without_letter = s2.replace(letter, "")
+            s2 = s2_without_letter + letter*(len(s2)-len(s2_without_letter)-1)
+    return True
+
+
