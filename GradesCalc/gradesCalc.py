@@ -16,7 +16,7 @@ def final_grade(input_path: str, output_path: str) -> int:
     output_file = open(output_path, 'w')
     course_avg_sum = 0
     for line in input_file:
-        student_id, final_grade, output_line = getOutputLine(line[:-1])
+        student_id, final_grade, output_line = getOutputLine(line.strip('\n'))
         if output_line:
             output_lines[student_id] = output_line
             if student_id in saved_avg_grades:
